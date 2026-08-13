@@ -2,72 +2,301 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Jessyca Athalia</title>
-<meta name="description" content="Jessyca Athalia — personal site.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy 21st Birthday, Jessyca Athalia</title>
+<meta name="description" content="For Jessyca Athalia — 10 November.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♥</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js" integrity="sha384-Ukv1p/xTma6P4/2bY5KzWBw+ydSpXmhCMtyciIQVDJ1RmOxtCYNMF1uXT9T63H67" crossorigin="anonymous"></script>
 <style>
-  :root {
-    --bg: #faf9f7;
-    --fg: #1a1a1a;
-    --muted: #6b6b6b;
-    --rule: #e2e0dc;
+  :root{
+    --ink:#1b0713; --deep:#2d0f22; --paper:#fff1f5; --paper-ink:#3d0a22;
+    --pink:#ff2d6f; --pink-2:#ff4d88; --blush:#ffd7e4; --soft:#ffa6c1; --gold:#ffd76e;
+    --pixel:'Pixelify Sans',ui-monospace,monospace;
+    --hud:'Press Start 2P',ui-monospace,monospace;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #111110;
-      --fg: #f2f0ec;
-      --muted: #8d8a84;
-      --rule: #2a2926;
-    }
-  }
-  * { box-sizing: border-box; }
-  html, body { height: 100%; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--fg);
-    font-family: ui-sans-serif, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-  }
-  main {
-    max-width: 32rem;
-    width: 100%;
-    text-align: center;
-  }
-  h1 {
-    font-family: ui-serif, Georgia, "Times New Roman", serif;
-    font-weight: 400;
-    font-size: clamp(2.25rem, 9vw, 3.75rem);
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-    margin: 0 0 1.25rem;
-  }
-  .rule {
-    width: 3rem;
-    height: 1px;
-    background: var(--rule);
-    margin: 0 auto 1.25rem;
-    border: 0;
-  }
-  p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 0.95rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:var(--ink);color:var(--paper);
+    font-family:var(--pixel);-webkit-font-smoothing:none;overflow:hidden;overscroll-behavior:none}
+  a{color:var(--gold)}a:hover{color:var(--pink)}
+  #app{position:fixed;inset:0;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
+    background:radial-gradient(circle at 50% 34%,#43132e 0%,#1b0713 76%);contain:paint}
+  .hearts{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+  .hearts span{position:absolute;bottom:-40px;will-change:transform,opacity;animation:rise linear infinite}
+  @keyframes rise{0%{transform:translate3d(0,0,0) rotate(0);opacity:0}
+    10%{opacity:.5}100%{transform:translate3d(0,-115vh,0) rotate(22deg);opacity:0}}
+  .hud{position:absolute;top:max(16px,env(safe-area-inset-top));left:16px;right:16px;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;z-index:6}
+  .hp{display:flex;gap:5px}
+  .hp span{font-size:15px;line-height:1;font-family:var(--pixel);font-weight:700}
+  .chips{display:flex;gap:8px;align-items:center}
+  .chip{font-family:var(--pixel);font-weight:700;font-size:13px;letter-spacing:.04em;line-height:1;
+    color:var(--soft);border:2px solid var(--pink-2);padding:6px 8px;background:rgba(27,7,19,.5)}
+  .chip.gold{color:var(--gold)}
+  .chip.mute{color:#b4527a}
+  .stage{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:22px;padding:76px 22px 58px;text-align:center;animation:screenIn .32s cubic-bezier(.22,.61,.36,1) both}
+  @keyframes screenIn{from{opacity:0;transform:translate3d(0,12px,0)}to{opacity:1;transform:none}}
+  @keyframes zoomIn{from{opacity:.35;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+  @keyframes zoomOut{from{opacity:0;transform:scale(1.16)}to{opacity:1;transform:scale(1)}}
+  @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+  h1{font-family:var(--pixel);font-weight:700;font-size:clamp(34px,9vw,74px);line-height:1.04;margin:0;
+    color:var(--paper);text-shadow:5px 5px 0 var(--pink)}
+  h2{font-family:var(--pixel);font-weight:500;font-size:clamp(20px,5vw,32px);line-height:1.3;margin:0;color:var(--blush)}
+  .prompt{font-family:var(--pixel);font-weight:700;letter-spacing:.05em;font-size:15px;color:var(--gold);
+    animation:blink 1.2s steps(1) infinite}
+  .frame{border:5px solid var(--blush);box-shadow:0 0 0 5px var(--ink),0 0 0 9px var(--pink-2);
+    background:var(--deep);overflow:hidden}
+  .box{position:relative;background:var(--paper);color:var(--paper-ink);text-align:left;
+    border:5px solid var(--pink-2);box-shadow:0 0 0 5px var(--ink),0 0 0 9px var(--blush);
+    padding:26px 22px 30px;max-width:760px;width:100%}
+  .box .tag{position:absolute;top:-16px;left:16px;background:var(--pink);color:var(--paper);
+    font-family:var(--pixel);font-weight:700;letter-spacing:.04em;font-size:13px;line-height:1;padding:8px 10px}
+  .box p{margin:0;font-family:var(--pixel);font-weight:500;font-size:clamp(19px,4.6vw,26px);line-height:1.45}
+  .box .meta{margin-top:14px;font-family:var(--pixel);font-weight:700;font-size:13px;letter-spacing:.04em;color:#b4527a}
+  .box .caret{position:absolute;right:14px;bottom:10px;font-size:15px;color:var(--pink);animation:bob 1s ease-in-out infinite}
+  .media{width:min(86vw,420px);aspect-ratio:4/3;animation:zoomOut .5s cubic-bezier(.22,.61,.36,1) both}
+  .media.tall{aspect-ratio:9/16;width:auto;height:min(56vh,560px);animation:zoomIn .5s cubic-bezier(.22,.61,.36,1) both}
+  .media img,.media video{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.12) contrast(1.05)}
+  .mapwrap{position:absolute;inset:0;z-index:5;background:var(--ink);overflow:hidden;
+    transition:top .95s cubic-bezier(.22,.61,.36,1),left .95s cubic-bezier(.22,.61,.36,1),
+      right .95s cubic-bezier(.22,.61,.36,1),bottom .95s cubic-bezier(.22,.61,.36,1),border-width .95s cubic-bezier(.22,.61,.36,1);
+    border:0 solid var(--blush)}
+  .mapwrap svg{width:100%;height:100%;display:block}
+  .letter{display:flex;flex-direction:column;gap:16px;height:100%}
+  .letter .sig{font-family:var(--pixel);font-weight:700;font-size:clamp(23px,5.5vw,30px);color:var(--pink);margin-top:auto}
+  .btn{border:4px solid var(--pink-2);color:var(--paper);font-family:var(--pixel);font-weight:700;
+    letter-spacing:.05em;font-size:15px;padding:15px;text-align:center;cursor:pointer;background:none}
+  .btn:hover{background:var(--pink)}
+  .play{width:clamp(72px,18vw,104px);aspect-ratio:1;border:5px solid var(--pink-2);background:rgba(27,7,19,.6);
+    display:flex;align-items:center;justify-content:center}
+  .play i{display:block;width:0;height:0;border-left:.32em solid var(--paper);
+    border-top:.2em solid transparent;border-bottom:.2em solid transparent;font-size:clamp(72px,18vw,104px);margin-left:.06em}
+  .burst{position:absolute;top:44%;left:50%;z-index:9;pointer-events:none}
+  .burst span{position:absolute;will-change:transform,opacity}
+  @media (min-width:860px) and (orientation:landscape){
+    .stage{flex-direction:row;gap:34px;padding:96px 40px 40px;text-align:left;align-items:center}
+    .stage.center{flex-direction:column;text-align:center}
+    .media{width:min(46vw,620px);height:min(70vh,620px);aspect-ratio:auto}
+    .media.tall{height:min(74vh,660px);width:auto;aspect-ratio:9/16}
+    .box{max-width:min(42vw,560px)}
   }
 </style>
 </head>
 <body>
-  <main>
-    <h1>Jessyca Athalia</h1>
-    <hr class="rule">
-    <p>Coming soon</p>
-  </main>
+<div id="app"></div>
+<audio id="song" src="assets/song.mp3" loop preload="auto"></audio>
+
+<script>
+/* ─── EDIT ME ────────────────────────────────────────────────────────────────
+   Drop your files in assets/ :  video.mp4   song.mp3   photo1.jpg …
+   Then edit MEMORIES below — one entry per photo.                            */
+const MEMORIES = [
+  { src: 'assets/photo1.jpg', note: 'You were mid-sentence about something unimportant and I remember thinking: oh no. Oh no, I like her.', date: 'THE BEGINNING' },
+  { src: 'assets/photo2.jpg', note: 'Your note goes here. Two or three lines, in your voice — short beats clever.', date: 'YOUR CAPTION' },
+  { src: 'assets/photo3.jpg', note: 'I keep this one on my lock screen. You know that already.', date: 'A TUESDAY' },
+  { src: 'assets/photo1.jpg', note: 'Nothing happened this day. That is exactly why I kept the photo.', date: 'SOMETIME IN JULY' },
+  { src: 'assets/photo2.jpg', note: 'You laughed so hard the photo came out blurry. Keeping it blurry.', date: 'YOUR CAPTION' },
+  { src: 'assets/photo3.jpg', note: 'Cold hands. Warm everything else.', date: 'LAST DECEMBER' },
+  { src: 'assets/photo1.jpg', note: 'Twenty-one looks good on you. So did twenty.', date: 'THIS YEAR' },
+  { src: 'assets/photo2.jpg', note: 'If I had to explain us to someone, I would just show them this.', date: 'YOUR CAPTION' },
+  { src: 'assets/photo3.jpg', note: 'Same time next year, and the one after that.', date: '10 NOVEMBER' },
+];
+const LETTER = 'Your long letter goes here — the one you\u2019d never say out loud. Four short paragraphs is plenty; plain sentences land hardest.';
+const VIDEO_WORDS = 'I was never good at saying my feelings out loud, but here is me trying and i hope it reaches you \u2665';
+const MAP_WORDS = 'U were born on 10th November 2005 in Pasuruan, Then u moved out to Surabaya and thats where you met me \uD83D\uDC97';
+const MAP_MS = 14600;
+/* ───────────────────────────────────────────────────────────────────────── */
+
+const app = document.getElementById('app');
+const song = document.getElementById('song');
+const N = MEMORIES.length;
+const LAST = N + 3;               // 0 hi · 1 map · 2 video-intro · 3 video · 4..N+2 photos · N+3 letter
+let step = 0, mapDone = false, musicOn = false;
+
+function heartsLayer() {
+  const cfg = [[7, 14, 9, 0], [26, 10, 11, 1.6], [47, 17, 8.4, 3.1], [68, 11, 12, .7], [86, 15, 10, 2.3]];
+  const colors = ['#ff2d6f', '#ffa6c1', '#ff2d6f', '#ffd76e', '#ffa6c1'];
+  return '<div class="hearts">' + cfg.map((c, i) =>
+    '<span style="left:' + c[0] + '%;font-size:' + c[1] + 'px;color:' + colors[i] +
+    ';animation-duration:' + c[2] + 's;animation-delay:' + c[3] + 's">\u2665</span>').join('') + '</div>';
+}
+function hud() {
+  const got = step < 4 ? 0 : Math.min(N, step - 3);
+  const hp = Array.from({ length: N }, (_, i) =>
+    '<span style="color:' + (i < got ? '#ff2d6f' : '#5c2038') + '">\u2665</span>').join('');
+  const label = step === 0 ? 'START' : step === 1 ? 'MAP' : step === 2 ? 'VIDEO'
+    : step === 3 ? 'PLAYING' : step === LAST ? 'END' : String(step - 3).padStart(2, '0') + '/09';
+  const music = step === 3 ? '<div class="chip mute">\u266A PAUSED</div>'
+    : '<div class="chip gold">\u266A ' + (musicOn ? 'ON' : 'TAP FOR MUSIC') + '</div>';
+  return '<div class="hud"><div class="hp">' + hp + '</div><div class="chips">' + music +
+    '<div class="chip">' + label + '</div><div class="chip">LV 21</div></div></div>';
+}
+function box(tag, text, meta) {
+  return '<div class="box"><div class="tag">' + tag + '</div><p>' + text + '</p>' +
+    (meta ? '<div class="meta">' + meta + '</div>' : '') + '<div class="caret">\u25BC</div></div>';
+}
+function burst() {
+  const dirs = [[-170, -250], [160, -270], [-220, -60], [215, -40], [-130, 210], [140, 230], [-30, -320], [40, 300]];
+  const cols = ['#ff2d6f', '#ffd7e4', '#ffd76e', '#ffa6c1'];
+  return '<div class="burst">' + dirs.concat(dirs).map((d, i) => {
+    const dur = 1.8 + (i % 5) * .18, del = (i > 7 ? .18 : 0) + (i % 4) * .05, sz = 13 + (i % 6) * 3;
+    return '<span style="font-size:' + sz + 'px;color:' + cols[i % 4] + ';animation:burst' +
+      (i % 8) + ' ' + dur + 's cubic-bezier(.1,.7,.3,1) ' + del + 's both">\u2665</span>';
+  }).join('') + '</div>';
+}
+(function injectBurstKeyframes() {
+  const dirs = [[-170, -250], [160, -270], [-220, -60], [215, -40], [-130, 210], [140, 230], [-30, -320], [40, 300]];
+  const css = dirs.map((d, i) => '@keyframes burst' + i + '{from{opacity:1;transform:translate3d(0,0,0) scale(.4)}' +
+    'to{opacity:0;transform:translate3d(' + d[0] + 'px,' + d[1] + 'px,0) scale(1.4) rotate(' + (i % 2 ? 30 : -35) + 'deg)}}').join('');
+  const s = document.createElement('style'); s.textContent = css; document.head.appendChild(s);
+})();
+
+function render(opts) {
+  opts = opts || {};
+  let html = heartsLayer() + hud();
+  if (opts.burst) html += burst();
+
+  if (step === 0) {
+    html += '<div class="stage center"><div style="font-size:46px;color:#ff2d6f;animation:bob 1.6s ease-in-out infinite">\u2665</div>' +
+      '<h1>HAPPY 21ST<br>BIRTHDAY</h1><h2>Jessyca Athalia</h2>' +
+      '<div class="prompt">CLICK TO CONTINUE \u25B8</div></div>';
+  } else if (step === 1) {
+    html += '<div class="mapwrap" id="mapwrap"><svg id="mapsvg" viewBox="0 0 420 300" preserveAspectRatio="xMidYMid slice"></svg></div>';
+    if (mapDone) html += '<div class="stage" id="mapstage" style="justify-content:flex-end;padding-bottom:8vh">' +
+      box('LOCATION', MAP_WORDS, 'PASURUAN \u2192 SURABAYA \u00B7 EAST JAVA') + '</div>';
+  } else if (step === 2) {
+    html += '<div class="stage center"><h2 style="max-width:16ch">Hi Jess, I made a video for you. Wanna Watch?</h2>' +
+      '<div class="frame media tall" style="animation:screenIn .32s both;display:flex;align-items:center;justify-content:center">' +
+      '<div class="play"><i></i></div></div><div class="prompt">\u25B6 PRESS PLAY</div></div>';
+  } else if (step === 3) {
+    html += '<div class="stage"><div class="frame media tall"><video id="vid" playsinline controls autoplay ' +
+      'src="assets/video.mp4"></video></div>' + box('WORDS FROM CLEMENT', VIDEO_WORDS, '') + '</div>';
+  } else if (step === LAST) {
+    html += '<div class="stage center"><div class="prompt" style="animation:none;color:var(--gold);font-size:18px">\u2665 THE LAST ONE \u2665</div>' +
+      '<div class="box letter"><div class="tag">CLEMENT</div><p>' + LETTER + '</p>' +
+      '<div class="sig">HAPPY BIRTHDAY, JESS \u2665</div></div>' +
+      '<div class="btn" id="again">\u25B6 PLAY IT AGAIN</div></div>';
+  } else {
+    const m = MEMORIES[step - 4];
+    html += '<div class="stage"><div class="frame media"><img src="' + m.src + '" alt=""></div>' +
+      box('CLEMENT', m.note, 'MEMORY ' + String(step - 3).padStart(2, '0') + ' / 09 \u00B7 ' + m.date) + '</div>';
+  }
+  app.innerHTML = html;
+
+  if (step === 1) startMap();
+  if (step === 3) {
+    const v = document.getElementById('vid');
+    if (song) { song.pause(); }
+    if (v) {
+      v.addEventListener('ended', next);
+      v.addEventListener('error', () => {
+        v.parentNode.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;' +
+          'text-align:center;padding:20px;font-family:var(--pixel);font-weight:700;font-size:14px;color:#ffa6c1">' +
+          'drop your clip at<br>assets/video.mp4</div>';
+      });
+    }
+  } else if (musicOn && song && song.paused) { song.play().catch(() => {}); }
+}
+
+function next(e) {
+  if (e && e.target && (e.target.tagName === 'VIDEO' || e.target.closest('video'))) return;
+  if (!musicOn && song) { song.play().then(() => { musicOn = true; }).catch(() => {}); musicOn = true; }
+  const wasStart = step === 0;
+  step = (step + 1) % (LAST + 1);
+  mapDone = false;
+  clearTimeout(window.__mapT);
+  if (step === 1) window.__mapT = setTimeout(() => { mapDone = true; shrinkMap(); }, MAP_MS);
+  render({ burst: wasStart });
+}
+app.addEventListener('click', next);
+window.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') next(); });
+
+function shrinkMap() {
+  const w = document.getElementById('mapwrap');
+  if (!w) return;
+  const landscape = window.matchMedia('(min-width:860px) and (orientation:landscape)').matches;
+  if (landscape) { w.style.top = '96px'; w.style.left = '40px'; w.style.right = '52vw'; w.style.bottom = '40px'; }
+  else { w.style.top = '96px'; w.style.left = '22px'; w.style.right = '22px'; w.style.bottom = '46vh'; }
+  w.style.borderWidth = '5px';
+  w.style.boxShadow = '0 0 0 5px var(--ink),0 0 0 9px var(--pink-2)';
+  render();
+}
+
+/* ── the earth → Pasuruan → Surabaya animation ───────────────────────────── */
+let WORLD = null;
+d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json')
+  .then(t => { WORLD = topojson.feature(t, t.objects.countries).features; if (step === 1) startMap(); });
+
+function startMap() {
+  const svgEl = document.getElementById('mapsvg');
+  if (!svgEl || !WORLD || svgEl.dataset.on) return;
+  svgEl.dataset.on = '1';
+  const PAS = [112.9075, -7.6453], SBY = [112.7521, -7.2575], W = 420, H = 300;
+  const svg = d3.select(svgEl);
+  svg.append('rect').attr('width', W).attr('height', H).attr('fill', '#1b0713');
+  const projection = d3.geoOrthographic().translate([W / 2, H / 2]).clipAngle(90);
+  const path = d3.geoPath(projection), grat = d3.geoGraticule().step([15, 15])();
+  const sphere = svg.append('path').datum({ type: 'Sphere' }).attr('fill', '#3a0f28')
+    .attr('stroke', '#ff4d88').attr('stroke-width', 1.4);
+  const gLand = svg.append('g'), gGrat = svg.append('g').append('path')
+    .attr('fill', 'none').attr('stroke', '#ff2d6f').attr('stroke-opacity', .22).attr('stroke-width', .6);
+  const lands = gLand.selectAll('path').data(WORLD).join('path')
+    .attr('fill', '#ffd7e4').attr('stroke', '#ff4d88').attr('stroke-width', .7).attr('stroke-linejoin', 'round');
+  const route = svg.append('path').attr('fill', 'none').attr('stroke', '#7a1038')
+    .attr('stroke-width', 2).attr('stroke-dasharray', '5 5').attr('opacity', 0);
+  const gCar = svg.append('g').attr('opacity', 0);
+  gCar.append('rect').attr('x', -9).attr('y', -4).attr('width', 18).attr('height', 8).attr('rx', 2).attr('fill', '#ff2d6f');
+  gCar.append('rect').attr('x', -4).attr('y', -8).attr('width', 9).attr('height', 5).attr('rx', 1.5).attr('fill', '#fff1f5');
+  gCar.append('circle').attr('cx', -5).attr('cy', 4).attr('r', 2.4).attr('fill', '#2a0512');
+  gCar.append('circle').attr('cx', 5).attr('cy', 4).attr('r', 2.4).attr('fill', '#2a0512');
+  const pin = (label, color) => {
+    const g = svg.append('g').attr('opacity', 0);
+    g.append('text').attr('text-anchor', 'middle').attr('font-size', 19).attr('fill', color)
+      .attr('stroke', '#fff1f5').attr('stroke-width', 1.6).attr('paint-order', 'stroke').attr('dy', 5).text('\u2665');
+    g.append('text').attr('x', 15).attr('y', -7).attr('font-size', 11).attr('font-weight', 700)
+      .style('font-family', "'Pixelify Sans',monospace").attr('fill', '#2a0512')
+      .attr('stroke', '#fff1f5').attr('stroke-width', 3).attr('paint-order', 'stroke').text(label);
+    return g;
+  };
+  const pinP = pin('PASURUAN', '#7a1038'), pinS = pin('SURABAYA', '#ff2d6f');
+  const R0 = [-20, -8], RID = [-118, 3], RP = [-PAS[0], -PAS[1]], RS = [-SBY[0], -SBY[1]];
+  const S0 = 150, SID = 620, SC = 16000;
+  const T = [3000, 2200, 2600, 5400, 1400], E = T.reduce((a, d) => (a.push((a[a.length - 1] || 0) + d), a), []);
+  const TOTAL = E[E.length - 1], lerp = (a, b, t) => a + (b - a) * t, ease = d3.easeCubicInOut;
+  let t0 = null;
+  const timer = d3.timer(now => {
+    if (t0 === null) t0 = now;
+    const ms = Math.min(now - t0, TOTAL);
+    let i = 0; while (i < E.length - 1 && ms >= E[i]) i++;
+    const t = ease(Math.max(0, Math.min(1, (ms - (E[i - 1] || 0)) / T[i])));
+    let rot = R0, scale = S0, carT = -1, rOn = 0, pOn = 0, sOn = 0;
+    if (i === 0) { rot = [lerp(R0[0], RID[0], t), lerp(R0[1], RID[1], t)]; }
+    else if (i === 1) { rot = RID; scale = S0 * Math.pow(SID / S0, t); }
+    else if (i === 2) { rot = [lerp(RID[0], RP[0], t), lerp(RID[1], RP[1], t)]; scale = SID * Math.pow(SC / SID, t); pOn = Math.max(0, (t - .55) / .45); }
+    else if (i === 3) { rot = [lerp(RP[0], RS[0], t), lerp(RP[1], RS[1], t)]; scale = SC; carT = t; rOn = 1; pOn = 1; sOn = Math.max(0, (t - .5) / .5); }
+    else { rot = RS; scale = SC; carT = 1; rOn = .6; pOn = 1; sOn = 1; }
+    projection.rotate(rot).scale(scale);
+    sphere.attr('d', path); lands.attr('d', path);
+    gGrat.attr('d', path(grat)).attr('opacity', scale < 1200 ? 1 : .25);
+    route.attr('d', path({ type: 'LineString', coordinates: [PAS, SBY] })).attr('opacity', rOn);
+    const p = projection(PAS), s = projection(SBY);
+    pinP.attr('transform', 'translate(' + p[0] + ',' + p[1] + ')').attr('opacity', pOn);
+    pinS.attr('transform', 'translate(' + s[0] + ',' + s[1] + ')').attr('opacity', sOn);
+    if (carT >= 0) {
+      const c = projection(d3.geoInterpolate(PAS, SBY)(carT));
+      const ang = Math.atan2(s[1] - p[1], s[0] - p[0]) * 180 / Math.PI;
+      gCar.attr('opacity', 1).attr('transform', 'translate(' + c[0] + ',' + c[1] + ') rotate(' + ang + ')');
+    }
+    if (ms >= TOTAL) timer.stop();
+  });
+}
+
+render();
+</script>
 </body>
 </html>
